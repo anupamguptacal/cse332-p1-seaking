@@ -68,9 +68,8 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
         if (this.size > 0) {
         	// begins percolating down with root and child of root with
         	// highest priority (smallest value)
-        	this.percolateDown(0, this.findMinChildIndex(this.child(0,0), 
-        			           this.child(1,0), this.child(2,0),
-        			           this.child(3,0)));
+        	int firstChildIndex = this.child(0,0);
+        	this.percolateDown(0, this.findMinChildIndex(firstChildIndex));
         }
         return value;
     }
@@ -139,10 +138,8 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
     		this.data[minChildIndex] = this.data[parentIndex];
     		this.data[parentIndex] = temp;
     		parentIndex = minChildIndex;
-    		minChildIndex = this.findMinChildIndex(this.child(0, parentIndex),
-    											   this.child(1, parentIndex),
-    											   this.child(2, parentIndex),
-    											   this.child(3, parentIndex));
+    		int firstChildIndex = this.child(0, parentIndex);
+    		minChildIndex = this.findMinChildIndex(firstChildIndex);
     	}
     		
     }
@@ -150,22 +147,17 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
     // finds and returns the child that has the highest priority
     // returns -1 if the parent has no children (lowest child's index
     // exceeds size of list)
-    private int findMinChildIndex(int child0, int child1, int child2, int child3) {
+    private int findMinChildIndex(int firstChild) {
     	int min;
-    	if (child0 > this.size) {
+    	if (firstChild > this.size) {
     		return -1;
     	} else {
-    		min = child0;
-    	}
-    	// There has GOT to be a way to make this less icky and repetitive
-    	if (child1 < this.size && this.data[child1].compareTo(this.data[min]) < 0) {
-    		min = child1;
-    	}
-    	if (child2 < this.size && this.data[child2].compareTo(this.data[min]) < 0) {
-    		min = child2;
-    	}
-    	if (child3 < this.size && this.data[child3].compareTo(this.data[min]) < 0) {
-    		min = child3;
+    		min = firstChild;
+    		for (int i = firstChild + 1; i < firstChild + 4; i++) {
+    			if (i < this.size && this.data[i].compareTo(this.data[min]) < 0) {
+    				min = i;
+    			}
+    		}
     	}
     	return min;
     }
