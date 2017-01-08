@@ -8,33 +8,52 @@ import cse332.interfaces.worklists.LIFOWorkList;
  * for method specifications.
  */
 public class ArrayStack<E> extends LIFOWorkList<E> {
-
+	public E[] array;
+	int top;
     public ArrayStack() {
-        throw new NotYetImplementedException();
+    	array = (E[])new Object[10];
+    	top = -1;
     }
 
     @Override
     public void add(E work) {
-        throw new NotYetImplementedException();
+    	if(top + 1 == array.length) {
+    		E[] arrayCopy = (E[])new Object[array.length * 2];
+    		for(int i = 0; i < array.length; i ++) {
+    			arrayCopy[i] = array[i];
+    		}
+    		array = arrayCopy;
+    	}
+    	array[++top] = work;
     }
 
     @Override
     public E peek() {
-        throw new NotYetImplementedException();
+    	if(top == -1) {
+    		throw new java.util.NoSuchElementException();
+    	} else {
+    		return array[top];
+    	}
     }
 
     @Override
     public E next() {
-        throw new NotYetImplementedException();
+    	if(top == -1) {
+    		throw new java.util.NoSuchElementException();
+    	} else {
+    		top--;
+    		return array[top + 1];
+    	}
     }
 
     @Override
     public int size() {
-        throw new NotYetImplementedException();
+    	return top + 1;
     }
 
     @Override
     public void clear() {
-        throw new NotYetImplementedException();
+        top =  -1;
+        array = (E[])new Object[10];
     }
 }

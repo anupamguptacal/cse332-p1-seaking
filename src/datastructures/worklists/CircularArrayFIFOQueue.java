@@ -8,44 +8,87 @@ import cse332.interfaces.worklists.FixedSizeFIFOWorkList;
  * for method specifications.
  */
 public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
+	public E[] array;
+	int read;
+	int write;
+	int size;
     public CircularArrayFIFOQueue(int capacity) {
         super(capacity);
-        throw new NotYetImplementedException();
+        array = (E[])new Comparable[capacity];
+        read = 0;
+        write = -1;
+        size = 0;
     }
 
     @Override
+    // read refers to the element, write refers to the last space where the last element goes
     public void add(E work) {
-        throw new NotYetImplementedException();
+    	if(size == array.length) {
+    		throw new IllegalStateException();
+    	}else if(write == array.length) {
+    		write = -1;
+    	} else {
+    		array[++write] = work;
+    		size ++;
+    	}
     }
 
     @Override
     public E peek() {
-        throw new NotYetImplementedException();
+    	if(this.size() == 0) {
+    		throw new java.util.NoSuchElementException();
+    	} else {
+    		return array[read];
+    	}
     }
     
     @Override
     public E peek(int i) {
-        throw new NotYetImplementedException();
+    	if(this.size() == 0)
+    		throw new java.util.NoSuchElementException();
+    	else if ( i < 0 || i > this.size())
+    		throw new IndexOutOfBoundsException();
+    	else {
+    		return array[(read + write) % this.size()];
+    	}
     }
     
     @Override
     public E next() {
-        throw new NotYetImplementedException();
+    	if(size == 0)
+    		throw new java.util.NoSuchElementException();
+    	int temp = read;
+    	read++;
+    	if(read > array.length) {
+    		read = 0;
+    	}
+    	size--;
+    	return array[temp];
+    	
     }
     
     @Override
     public void update(int i, E value) {
-        throw new NotYetImplementedException();
+    	if(size == 0)
+    		throw new java.util.NoSuchElementException();
+    	if(i < 0 || i > size)
+    		throw new IndexOutOfBoundsException();
+    	else 
+    		array[(read + i) % array.length] = value;
     }
     
     @Override
     public int size() {
-        throw new NotYetImplementedException();
+    	return size;
+        
     }
     
     @Override
     public void clear() {
-        throw new NotYetImplementedException();
+    	size = 0;
+    	write = -1;
+    	read = 0;
+    	array = null;
     }
 
     @Override
