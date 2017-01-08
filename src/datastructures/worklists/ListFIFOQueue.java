@@ -1,6 +1,6 @@
 package datastructures.worklists;
 
-import cse332.exceptions.NotYetImplementedException;
+// import cse332.exceptions.NotYetImplementedException;
 import cse332.interfaces.worklists.FIFOWorkList;
 import java.util.NoSuchElementException;
 
@@ -45,10 +45,10 @@ public class ListFIFOQueue<E> extends FIFOWorkList<E> {
     // adds element to the list
     public void add(E work) {
     	if (this.hasWork()) {
-    		this.back.next = new ListNode(work);
+    		this.back.next = new ListNode<E>(work);
         	this.back = this.back.next;
     	} else { // list is empty, this will be first node
-    		this.front = new ListNode(work);
+    		this.front = new ListNode<E>(work);
     		this.back = this.front;
     	}
     	this.size++;
