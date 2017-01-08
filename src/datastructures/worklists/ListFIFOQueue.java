@@ -73,7 +73,8 @@ public class ListFIFOQueue<E> extends FIFOWorkList<E> {
     	
         E value = this.front.data;
         
-        // for the case of a list with one element
+        // for the case of a list with one element,
+        // we need to deal with this.back too
         if (this.front == this.back) {
         	this.back = null;
         }

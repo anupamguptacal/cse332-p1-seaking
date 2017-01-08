@@ -148,7 +148,8 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
     }
     
     // finds and returns the child that has the highest priority
-    // returns -1 if the parent has no children
+    // returns -1 if the parent has no children (lowest child's index
+    // exceeds size of list)
     private int findMinChildIndex(int child0, int child1, int child2, int child3) {
     	int min;
     	if (child0 > this.size) {
