@@ -2,7 +2,6 @@ package datastructures.worklists;
 
 import cse332.interfaces.worklists.PriorityWorkList;
 import java.util.NoSuchElementException;
-// import cse332.exceptions.NotYetImplementedException;
 
 /**
  * See cse332/interfaces/worklists/PriorityWorkList.java

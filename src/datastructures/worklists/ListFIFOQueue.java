@@ -1,6 +1,5 @@
 package datastructures.worklists;
 
-// import cse332.exceptions.NotYetImplementedException;
 import cse332.interfaces.worklists.FIFOWorkList;
 import java.util.NoSuchElementException;
 
@@ -10,30 +9,30 @@ import java.util.NoSuchElementException;
  * @param <E>
  */
 
-// Node class for list elements
-class ListNode<E> {
-	E data;
-	ListNode<E> next;
-	
-	ListNode() {
-		this(null, null);
-	}
-	
-	ListNode(E data) {
-		this(data, null);
-	}
-	
-	ListNode(E data, ListNode<E> next) {
-		this.data = data;
-		this.next = next;
-	}
-}
-
 // stores elements in a FIFO list
 public class ListFIFOQueue<E> extends FIFOWorkList<E> {
 	private int size;
 	private ListNode<E> front;
 	private ListNode<E> back;
+	
+	// Node class for list elements
+	private class ListNode<E> {
+		private E data;
+		private ListNode<E> next;
+		
+		public ListNode() {
+			this(null, null);
+		}
+		
+		public ListNode(E data) {
+			this(data, null);
+		}
+		
+		public ListNode(E data, ListNode<E> next) {
+			this.data = data;
+			this.next = next;
+		}
+	}
     
     public ListFIFOQueue() {
         this.size = 0;

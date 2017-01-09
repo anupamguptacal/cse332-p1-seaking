@@ -1,7 +1,7 @@
 package datastructures.worklists;
 
-import cse332.exceptions.NotYetImplementedException;
 import cse332.interfaces.worklists.FixedSizeFIFOWorkList;
+import cse332.exceptions.NotYetImplementedException;
 
 /**
  * See cse332/interfaces/worklists/FixedSizeFIFOWorkList.java
