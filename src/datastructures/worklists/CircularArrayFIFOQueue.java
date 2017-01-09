@@ -16,28 +16,31 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
         super(capacity);
         array = (E[])new Comparable[capacity];
         read = 0;
-        write = -1;
+        write = 0;
         size = 0;
     }
 
     @Override
     // read refers to the element, write refers to the last space where the last element goes
     public void add(E work) {
-    	if(size == array.length) {
+    	if(this.size() == array.length) {
     		throw new IllegalStateException();
-    	}else if(write == array.length) {
-    		write = -1;
-    	} else {
-    		array[++write] = work;
+    	}
+    	if(write == array.length) {
+    		write = 0;
+    	}
+    		array[write++] = work;
     		size ++;
     	}
-    }
+    
 
     @Override
     public E peek() {
     	if(this.size() == 0) {
     		throw new java.util.NoSuchElementException();
     	} else {
+    		if(read == array.length)
+    			read = 0;
     		return array[read];
     	}
     }
@@ -49,7 +52,9 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     	else if ( i < 0 || i > this.size())
     		throw new IndexOutOfBoundsException();
     	else {
-    		return array[(read + write) % this.size()];
+    		if(read == array.length)
+    			read = 0;
+    		return array[(read + i) % array.length];
     	}
     }
     
@@ -86,7 +91,7 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     @Override
     public void clear() {
     	size = 0;
-    	write = -1;
+    	write = 0;
     	read = 0;
     	array = null;
     }
