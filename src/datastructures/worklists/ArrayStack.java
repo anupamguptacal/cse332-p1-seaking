@@ -8,52 +8,52 @@ import cse332.interfaces.worklists.LIFOWorkList;
  * for method specifications.
  */
 public class ArrayStack<E> extends LIFOWorkList<E> {
-	public E[] array;
-	int top;
+	private E[] array;
+	private int top;
     public ArrayStack() {
-    	array = (E[])new Object[10];
-    	top = -1;
+    	this.array = (E[])new Object[10];
+    	this.top = -1;
     }
 
     @Override
     public void add(E work) {
-    	if(top + 1 == array.length) {
+    	if(this.top + 1 == this.array.length) {
     		E[] arrayCopy = (E[])new Object[array.length * 2];
-    		for(int i = 0; i < array.length; i ++) {
-    			arrayCopy[i] = array[i];
+    		for(int i = 0; i < this.array.length; i ++) {
+    			arrayCopy[i] = this.array[i];
     		}
-    		array = arrayCopy;
+    		this.array = arrayCopy;
     	}
-    	array[++top] = work;
+    	this.array[++top] = work;
     }
 
     @Override
     public E peek() {
-    	if(top == -1) {
+    	if(this.top == -1) {
     		throw new java.util.NoSuchElementException();
     	} else {
-    		return array[top];
+    		return this.array[this.top];
     	}
     }
 
     @Override
     public E next() {
-    	if(top == -1) {
+    	if(this.top == -1) {
     		throw new java.util.NoSuchElementException();
     	} else {
-    		top--;
-    		return array[top + 1];
+    		this.top--;
+    		return array[this.top + 1];
     	}
     }
 
     @Override
     public int size() {
-    	return top + 1;
+    	return this.top + 1;
     }
 
     @Override
     public void clear() {
-        top =  -1;
-        array = (E[])new Object[10];
+        this.top =  -1;
+        this.array = (E[])new Object[10];
     }
 }
