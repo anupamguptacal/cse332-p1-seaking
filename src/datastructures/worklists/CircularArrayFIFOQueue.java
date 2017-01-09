@@ -39,8 +39,9 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     	if(this.size() == 0) {
     		throw new java.util.NoSuchElementException();
     	} else {
-    		if(read == array.length)
+    		if(read == array.length) {
     			read = 0;
+    		}
     		return array[read];
     	}
     }
@@ -52,16 +53,18 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     	else if ( i < 0 || i > this.size())
     		throw new IndexOutOfBoundsException();
     	else {
-    		if(read == array.length)
+    		if(read == array.length) {
     			read = 0;
+    		}
     		return array[(read + i) % array.length];
     	}
     }
     
     @Override
     public E next() {
-    	if(size == 0)
+    	if(size == 0) {
     		throw new java.util.NoSuchElementException();
+    	}
     	int temp = read;
     	read++;
     	if(read > array.length) {
@@ -74,10 +77,12 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     
     @Override
     public void update(int i, E value) {
-    	if(size == 0)
+    	if(size == 0) {
     		throw new java.util.NoSuchElementException();
-    	if(i < 0 || i > size)
+    	}
+    	if(i < 0 || i > size) {
     		throw new IndexOutOfBoundsException();
+    	}
     	else 
     		array[(read + i) % array.length] = value;
     }
