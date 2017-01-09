@@ -1,6 +1,6 @@
 package datastructures.worklists;
 
-import cse332.exceptions.NotYetImplementedException;
+
 import cse332.interfaces.worklists.LIFOWorkList;
 
 /**

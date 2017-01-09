@@ -48,11 +48,11 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     
     @Override
     public E peek(int i) {
-    	if(this.size() == 0)
+    	if(this.size() == 0) {
     		throw new java.util.NoSuchElementException();
-    	else if ( i < 0 || i > this.size())
+    	} else if ( i < 0 || i > this.size()) {
     		throw new IndexOutOfBoundsException();
-    	else {
+    	} else {
     		if(read == array.length) {
     			read = 0;
     		}
