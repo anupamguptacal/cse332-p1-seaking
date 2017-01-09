@@ -9,28 +9,28 @@ import cse332.exceptions.NotYetImplementedException;
  */
 public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
 	public E[] array;
-	int read;
-	int write;
-	int size;
+	private int read;
+	private int write;
+	private int size;
     public CircularArrayFIFOQueue(int capacity) {
         super(capacity);
-        array = (E[])new Comparable[capacity];
-        read = 0;
-        write = 0;
-        size = 0;
+        this.array = (E[])new Comparable[capacity];
+        this.read = 0;
+        this.write = 0;
+        this.size = 0;
     }
 
     @Override
     // read refers to the element, write refers to the last space where the last element goes
     public void add(E work) {
-    	if(this.size() == array.length) {
+    	if(this.size() == this.array.length) {
     		throw new IllegalStateException();
     	}
-    	if(write == array.length) {
-    		write = 0;
+    	if(this.write == this.array.length) {
+    		this.write = 0;
     	}
-    		array[write++] = work;
-    		size ++;
+    		this.array[write++] = work;
+    		this.size ++;
     	}
     
 
@@ -39,61 +39,66 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     	if(this.size() == 0) {
     		throw new java.util.NoSuchElementException();
     	} else {
-    		if(read == array.length)
-    			read = 0;
-    		return array[read];
+    		if(this.read == this.array.length) {
+    			this.read = 0;
+    		}
+    		return this.array[this.read];
     	}
     }
     
     @Override
     public E peek(int i) {
-    	if(this.size() == 0)
+    	if(this.size() == 0) {
     		throw new java.util.NoSuchElementException();
-    	else if ( i < 0 || i > this.size())
+    	} else if ( i < 0 || i > this.size()) {
     		throw new IndexOutOfBoundsException();
-    	else {
-    		if(read == array.length)
-    			read = 0;
-    		return array[(read + i) % array.length];
+    	} else {
+    		if(this.read == this.array.length) {
+    			this.read = 0;
+    		}
+    		return this.array[(this.read + i) % this.array.length];
     	}
     }
     
     @Override
     public E next() {
-    	if(size == 0)
+    	if(this.size() == 0) {
     		throw new java.util.NoSuchElementException();
-    	int temp = read;
-    	read++;
-    	if(read > array.length) {
-    		read = 0;
     	}
-    	size--;
-    	return array[temp];
+    	int temp = this.read;
+    	this.read++;
+    	if(this.read > this.array.length) {
+    		this.read = 0;
+    	}
+    	this.size--;
+    	return this.array[temp];
     	
     }
     
     @Override
     public void update(int i, E value) {
-    	if(size == 0)
+    	if(this.size() == 0) {
     		throw new java.util.NoSuchElementException();
-    	if(i < 0 || i > size)
+    	}
+    	if(i < 0 || i > this.size()) {
     		throw new IndexOutOfBoundsException();
-    	else 
-    		array[(read + i) % array.length] = value;
+    	}	else  {
+    		this.array[(this.read + i) % this.array.length] = value;
+    	}
     }
     
     @Override
     public int size() {
-    	return size;
+    	return this.size;
         
     }
     
     @Override
     public void clear() {
-    	size = 0;
-    	write = 0;
-    	read = 0;
-    	array = null;
+    	this.size = 0;
+    	this.write = 0;
+    	this.read = 0;
+    	this.array = null;
     }
 
     @Override
