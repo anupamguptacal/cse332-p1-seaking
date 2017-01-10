@@ -12,6 +12,7 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
 	private int read;
 	private int write;
 	private int size;
+	
     public CircularArrayFIFOQueue(int capacity) {
         super(capacity);
         this.array = (E[])new Comparable[capacity];
@@ -31,7 +32,7 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     	}
     		this.array[write++] = work;
     		this.size ++;
-    	}
+    }
     
 
     @Override
@@ -98,7 +99,7 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     	this.size = 0;
     	this.write = 0;
     	this.read = 0;
-    	this.array = null;
+    	this.array = (E[])new Comparable[super.capacity()];
     }
 
     @Override

@@ -10,7 +10,8 @@ import cse332.interfaces.worklists.LIFOWorkList;
 public class ArrayStack<E> extends LIFOWorkList<E> {
 	private E[] array;
 	private int top;
-    public ArrayStack() {
+    
+	public ArrayStack() {
     	this.array = (E[])new Object[10];
     	this.top = -1;
     }
@@ -19,7 +20,7 @@ public class ArrayStack<E> extends LIFOWorkList<E> {
     public void add(E work) {
     	if(this.top + 1 == this.array.length) {
     		E[] arrayCopy = (E[])new Object[array.length * 2];
-    		for(int i = 0; i < this.array.length; i ++) {
+    		for(int i = 0; i < this.array.length; i++) {
     			arrayCopy[i] = this.array[i];
     		}
     		this.array = arrayCopy;
