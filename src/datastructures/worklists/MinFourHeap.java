@@ -97,7 +97,7 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
     
     // returns index of parent, given index of child
     private int parent(int childIndex) {
-    	return (int)Math.floor((childIndex - 1)/4);
+    	return ((childIndex - 1)/4);
     }
     
     // returns index of specified nth child of given parent
