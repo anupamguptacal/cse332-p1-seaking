@@ -45,6 +45,7 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     		if(!current.pointers.containsKey(part)) {
     			HashTrieNode presentNode = new HashTrieNode();
     			current.pointers.put(part, presentNode);
+    			
     		 }
     		current = current.pointers.get(part); 		  		
     	}
