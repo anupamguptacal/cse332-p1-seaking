@@ -10,8 +10,6 @@ public class HashTrieSet<A extends Comparable<A>, E extends BString<A>> extends 
      *       the constructor!  */
 
 	public HashTrieSet(Class<E> Type) {
-        // Call the correct super constructor...that's it!
-		// I have no idea what it wants
-        super(Dictionary<Type, Boolean>);
+		super(new HashTrieMap(Type));
     }
 }
