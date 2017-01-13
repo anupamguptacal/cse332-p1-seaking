@@ -2,7 +2,6 @@ package datastructures.worklists;
 
 import cse332.interfaces.worklists.PriorityWorkList;
 import java.util.NoSuchElementException;
-// import cse332.exceptions.NotYetImplementedException;
 
 /**
  * See cse332/interfaces/worklists/PriorityWorkList.java
@@ -11,12 +10,10 @@ import java.util.NoSuchElementException;
 public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
     /* Do not change the name of this field; the tests rely on it to work correctly. */
     private E[] data;
-    private int capacity;
     private int size;
     
     public MinFourHeap() {
-    	this.capacity = 10;
-        this.data = (E[])new Comparable[this.capacity];
+        this.data = (E[])new Comparable[10];
         this.size = 0;
     }
 
@@ -38,7 +35,7 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
         }
         this.size++;
         
-        if (this.size == this.capacity) {
+        if (this.size == this.data.length) {
         	this.growArray();
         }
     }
@@ -84,15 +81,13 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
     // removes all elements from the list
     // is it supposed to be exactly like the constructor...?
     public void clear() {
-    	this.capacity = 10;
-        this.data = (E[])new Comparable[this.capacity];
+        this.data = (E[])new Comparable[10];
         this.size = 0;
     }
     
     // doubles capacity of array
     private void growArray() {
-    	this.capacity *= 2;
-    	E[] newArray = (E[])new Comparable[this.capacity];
+    	E[] newArray = (E[])new Comparable[this.size * 2];
     	// Should we be using an iterator here? It's an array...
     	for (int i = 0; i < this.size; i++) {
     		newArray[i] = this.data[i];
@@ -102,7 +97,7 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
     
     // returns index of parent, given index of child
     private int parent(int childIndex) {
-    	return (int)Math.floor((childIndex - 1)/4);
+    	return ((childIndex - 1)/4);
     }
     
     // returns index of specified nth child of given parent
