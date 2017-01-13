@@ -28,6 +28,7 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
         @Override
         public Iterator<Entry<A, HashTrieMap<A, K, V>.HashTrieNode>> iterator() {
             return pointers.entrySet().iterator();
+            
         }
     }
 
