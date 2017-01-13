@@ -26,10 +26,11 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     	if(this.size() == this.array.length) {
     		throw new IllegalStateException();
     	}
-    	if(this.write == this.array.length) {
+    	/*if(this.write == this.array.length) {
     		this.write = 0;
-    	}
-    		this.array[write++] = work;
+    	}*/
+    		this.array[(this.write)%this.array.length] = work;
+    		this.write++;
     		this.size ++;
     	}
     
@@ -42,7 +43,7 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     		if(this.read == this.array.length) {
     			this.read = 0;
     		}
-    		return this.array[this.read];
+    		return this.array[((this.read) % this.array.length)];
     	}
     }
     
@@ -71,7 +72,7 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     		this.read = 0;
     	}
     	this.size--;
-    	return this.array[temp];
+    	return this.array[temp % this.array.length];
     	
     }
     

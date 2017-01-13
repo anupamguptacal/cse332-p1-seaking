@@ -1,6 +1,5 @@
 package datastructures.worklists;
 
-
 import cse332.interfaces.worklists.LIFOWorkList;
 
 /**

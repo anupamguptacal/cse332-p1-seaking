@@ -1,5 +1,5 @@
 package tests.gitlab.duedate;
-
+import java.io.*;
 import cse332.types.AlphabeticString;
 import datastructures.dictionaries.HashTrieMap;
 import tests.TestsUtility;
@@ -9,8 +9,9 @@ import java.util.Map;
 
 public class HashTrieMapTests extends TestsUtility {
     protected static HashTrieMap<Character, AlphabeticString, String> STUDENT;
-
+    static PrintWriter printer; 
     public static void main(String[] args) {
+    printer = new PrintWriter("HashTrieNotworking.txt","UTF-8");
         new HashTrieMapTests().run();
     }
 
@@ -164,12 +165,15 @@ public class HashTrieMapTests extends TestsUtility {
         AlphabeticString keyA = a("keyboard");
         AlphabeticString keyB = a("keyesian");
         AlphabeticString keyC = a("bayesian");
-
+        
+        
         if (STUDENT.size() != 0 || !STUDENT.isEmpty()) {
             return 0;
         }
-
+        
+        printer.println("In testDeleteAll and inserting");
         STUDENT.insert(keyA, "KEYBOARD");
+        
         STUDENT.insert(keyB, "KEYESIAN");
         STUDENT.insert(keyC, "BAYESIAN");
 
@@ -585,7 +589,10 @@ public class HashTrieMapTests extends TestsUtility {
     }
 
     private static void addAll(HashTrieMap<Character, AlphabeticString, String> trie, String... words) {
+    	printer.println("addAll adds these words: " );
+    	printer.println(words);
         for (String word : words) {
+        	printer.println("Connecting " + a(word) + " to " + word.toUpperCase());
             trie.insert(a(word), word.toUpperCase());
         }
     }

@@ -38,26 +38,84 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
 
     @Override
     public V insert(K key, V value) {
-        throw new NotYetImplementedException();
+    	if(key == null || value == null) 
+    		throw new IllegalArgumentException();
+    	HashTrieNode current = (HashTrieNode)this.root;
+    	for(A part : key) {
+    		if(!current.pointers.containsKey(part)) {
+    			HashTrieNode presentNode = new HashTrieNode();
+    			current.pointers.put(part, presentNode);
+    		 }
+    		current = current.pointers.get(part); 		  		
+    	}
+    	V returnValue = current.value;
+    	current.value = value;
+    	return returnValue;
     }
 
     @Override
     public V find(K key) {
-        throw new NotYetImplementedException();
+    	if(key == null) {
+    		throw new IllegalArgumentException();
+    	}
+    	HashTrieNode current = (HashTrieNode)this.root;
+    	for(A part: key) {
+    		 if(current == null) {
+    			 return null;
+    		 }
+    		 current = current.pointers.get(part);
+    	} 
+    	if(current == null) {
+    		return null;
+    	}
+    	return current.value;
     }
 
     @Override
     public boolean findPrefix(K key) {
-        throw new NotYetImplementedException();
+    	if(key == null) {
+    		throw new IllegalArgumentException();
+    	}
+    	HashTrieNode current = (HashTrieNode)this.root;
+    	for(A part: key) {
+    		current = current.pointers.get(part);
+    		if(current == null) {
+    			return false;
+    		} 
+  
+    	} 
+    	return true;	
     }
 
     @Override
     public void delete(K key) {
-        throw new NotYetImplementedException();
+    	if(key == null) {
+    		throw new IllegalArgumentException();
+    	} 
+    	HashTrieNode lastDelete = (HashTrieNode)this.root;
+    	A lastDeletepart = null;
+    	HashTrieNode current = (HashTrieNode)this.root;
+    	for( A part: key) {
+    		if(current == null) {
+    			return;
+    		}
+    		if(current.value != null || current.pointers.size() > 1) {
+    			lastDelete = current;
+    			lastDeletepart = part;
+    		} 
+    		current = current.pointers.get(part);
+    	}
+    	if(current.value != null) {
+    		if (!current.pointers.isEmpty()) {
+    			current.value = null;
+    		} else {
+    			lastDelete.pointers.remove(lastDeletepart);
+    		}
+    	}
     }
 
     @Override
     public void clear() {
-        throw new NotYetImplementedException();
+    	this.root = null;
     }
 }
