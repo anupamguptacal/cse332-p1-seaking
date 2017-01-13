@@ -5,11 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import cse332.datastructures.containers.Item;
-import cse332.exceptions.NotYetImplementedException;
 import cse332.interfaces.misc.BString;
 import cse332.interfaces.trie.TrieMap;
-import cse332.types.AlphabeticString;
 
 /**
  * See cse332/interfaces/trie/TrieMap.java
@@ -30,46 +27,60 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
         @Override
         public Iterator<Entry<A, HashTrieMap<A, K, V>.HashTrieNode>> iterator() {
             return pointers.entrySet().iterator();
+            
         }
     }
 
     public HashTrieMap(Class<K> KClass) {
         super(KClass);
         this.root = new HashTrieNode();
+        this.size = 0;
     }
 
     @Override
     public V insert(K key, V value) {
-    	if (key == null || value == null) 
+    	if (key == null || value == null) {
     		throw new IllegalArgumentException();
-    	HashTrieNode current = (HashTrieNode)this.root;
-    	for(A part : key) {
-    		if(!current.pointers.containsKey(part)) {
-    			HashTrieNode presentNode = new HashTrieNode();
-    			current.pointers.put(part, presentNode);
-    			
-    		 }
-    		current = current.pointers.get(part); 		  		
     	}
-    	V returnValue = current.value;
-    	current.value = value;
+    	if (this.root == null) {
+    		this.root = new HashTrieNode();
+    	}
+    	V returnValue = null;
+    	if (key.isEmpty()) {
+    		returnValue = this.root.value;
+    		this.root.value = value;
+    	} else {
+    		HashTrieNode current = (HashTrieNode)this.root;
+    		for(A part : key) {
+    			if (!current.pointers.containsKey(part)) {
+    				current.pointers.put(part, new HashTrieNode());    			
+    			}
+    			current = current.pointers.get(part); 		  		
+    		}
+    		returnValue = current.value;
+    		current.value = value;
+    	}
+    	// Why does the test fail if I put this.size++ in the else statement?
+    	this.size++;
     	return returnValue;
     }
 
     @Override
     public V find(K key) {
-        if (key == null) {
-        	throw new IllegalArgumentException();
-        }
-        Iterator<A> keyIterator = key.iterator();
-        HashTrieNode current = (HashTrieNode)this.root;
-        while (keyIterator.hasNext()) {
-        	current = current.pointers.get(keyIterator.next());
-        	if (current == null) {
-        		return null;
-        	}
-        }
-        return current.value;
+    	if (key == null) {
+    		throw new IllegalArgumentException();
+    	}
+    	if (this.root == null) {
+    		return null;
+    	}
+    	HashTrieNode current = (HashTrieNode)this.root;
+    	for (A part: key) {
+    		current = current.pointers.get(part);
+    		if (current == null) {
+    			return null;
+    		}
+    	}
+    	return current.value;
     }
 
     @Override
@@ -77,45 +88,63 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     	if (key == null) {
     		throw new IllegalArgumentException();
     	}
+    	// Is this check necessary?
+    	if (this.root == null) {
+    		return false;
+    	}
     	HashTrieNode current = (HashTrieNode)this.root;
-    	for(A part: key) {
+    	for (A part: key) {
     		current = current.pointers.get(part);
-    		if(current == null) {
+    		if (current == null) {
     			return false;
     		} 
-    	} 
+    	}
     	return true;	
     }
 
     @Override
+    // Whenever I try to edit this it keeps breaking, but I'm pretty
+    // sure that there is some optimization to be done here
     public void delete(K key) {
-    	if(key == null) {
+    	if (key == null) {
     		throw new IllegalArgumentException();
     	} 
     	HashTrieNode lastDelete = (HashTrieNode)this.root;
-    	A lastDeletepart = null;
+    	A lastDeletePart = null;
     	HashTrieNode current = (HashTrieNode)this.root;
-    	for( A part: key) {
-    		if(current == null) {
+    	for (A part: key) {
+    		if (current == null) {
     			return;
     		}
-    		if(current.value != null || current.pointers.size() > 1) {
+    		if (current.value != null || current.pointers.size() > 1) {
     			lastDelete = current;
-    			lastDeletepart = part;
-    		} 
-    		current = current.pointers.get(part);
+    			lastDeletePart = part;
+    		}
+    		if (!current.pointers.isEmpty()) {
+    			current = current.pointers.get(part);
+    		} else {
+    			// current = null?
+    			return;
+    		}
     	}
-    	if(current.value != null) {
+    	if (current.value != null) {
     		if (!current.pointers.isEmpty()) {
     			current.value = null;
     		} else {
-    			lastDelete.pointers.remove(lastDeletepart);
+    			this.size--;
+    			if (lastDeletePart != null) {
+    				lastDelete.pointers.remove(lastDeletePart);
+    			}
+    			else {
+    				this.root = null;
+    			}
     		}
     	}
     }
 
     @Override
     public void clear() {
+    	this.size = 0;
     	this.root = null;
     }
 }

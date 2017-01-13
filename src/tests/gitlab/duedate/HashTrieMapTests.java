@@ -1,39 +1,29 @@
 package tests.gitlab.duedate;
-
 import cse332.types.AlphabeticString;
 import datastructures.dictionaries.HashTrieMap;
 import tests.TestsUtility;
-
 import java.util.HashMap;
 import java.util.Map;
-
 public class HashTrieMapTests extends TestsUtility {
     protected static HashTrieMap<Character, AlphabeticString, String> STUDENT;
-
     public static void main(String[] args) {
         new HashTrieMapTests().run();
     }
-
     public static void init() {
         STUDENT = new HashTrieMap<>(AlphabeticString.class);
     }
-
     @Override
     protected void run() {
         SHOW_TESTS = true;
         PRINT_TESTERR = true;
         DEBUG = true;
-
         test("testBasic");
         test("testBasicDelete");
-
         test("testFindPrefixes");
         test("testFindNonexistentDoesNotCrash");
         test("testFindingNullEntriesCausesError");
-
         test("testInsertReplacesOldValue");
         test("testInsertingNullEntriesCausesError");
-
         test("testDeleteAll");
         test("testDeleteNothing");
         test("testDeleteAndInsertSingleChars");
@@ -41,14 +31,11 @@ public class HashTrieMapTests extends TestsUtility {
         test("testDeletingAtRoot");
         test("testDeletingEmptyString");
         test("testDeletingNullEntriesCausesError");
-
         test("testClear");
         test("checkUnderlyingStructure");
         test("stressTest");
-
         finish();
     }
-
     /**
      * Tests if insert, find, and findPrefix work in general.
      */
@@ -58,7 +45,6 @@ public class HashTrieMapTests extends TestsUtility {
         addAll(STUDENT, words);
         return (containsAllPaths(STUDENT, words) && doesNotContainAll(STUDENT, invalid)) ? 1 : 0;
     }
-
     /**
      * Checks to see if basic delete functionality works.
      */
@@ -68,38 +54,30 @@ public class HashTrieMapTests extends TestsUtility {
         if (!containsAllPaths(STUDENT, words)) {
             return 0;
         }
-
         STUDENT.delete(a("I don't exist"));
         STUDENT.delete(a("dreamer"));
-
         if (!containsAllPaths(STUDENT, "dog", "doggy", "cat") &&
                 !containsAllPrefixes(STUDENT, "dreamer", "dreame", "dream", "drea", "dre", "dr") &&
                 !STUDENT.findPrefix(a("d"))) {
             return 0;
         }
-
         STUDENT.delete(a("dog"));
         if (!containsAllPaths(STUDENT, "doggy", "cat")) {
             return 0;
         }
-
         STUDENT.delete(a("doggy"));
         return containsAllPaths(STUDENT, "cat") ? 1 : 0;
     }
-
     /**
      * Test findPrefix more rigorously.
      */
     public static int testFindPrefixes() {
         String[] words = {"dog", "doggy", "doge", "dragon", "cat", "draggin"};
         addAll(STUDENT, words);
-
         boolean allPrefixesFound = containsAllPrefixes(STUDENT, "d", "", "do");
         boolean invalidPrefixesIgnored = doesNotContainAllPrefixes(STUDENT, "batarang", "dogee", "dragging");
-
         return allPrefixesFound && invalidPrefixesIgnored ? 1 : 0;
     }
-
     /**
      * Tests that trying to find a non-existent entity does the correct thing
      */
@@ -109,7 +87,6 @@ public class HashTrieMapTests extends TestsUtility {
                 STUDENT.find(a("ba")) == null && STUDENT.find(a("bazz")) == null &&
                 !STUDENT.findPrefix(a("boor")) && !STUDENT.findPrefix(a("z")) ? 1 : 0;
     }
-
     public static int testFindingNullEntriesCausesError() {
         try {
             STUDENT.find(null);
@@ -125,7 +102,6 @@ public class HashTrieMapTests extends TestsUtility {
         }
         return 1;
     }
-
     /**
      * Tests that inserts correctly wipe out old values.
      */
@@ -134,10 +110,8 @@ public class HashTrieMapTests extends TestsUtility {
         boolean initialValueIsNull = STUDENT.insert(key, "foo") == null;
         boolean originalValueReturned = STUDENT.insert(key, "bar").equals("foo");
         boolean replacementValueReturned = STUDENT.insert(key, "baz").equals("bar");
-
         return initialValueIsNull && originalValueReturned && replacementValueReturned ? 1 : 0;
     }
-
     public static int testInsertingNullEntriesCausesError() {
         try {
             STUDENT.insert(null, "foo");
@@ -145,17 +119,14 @@ public class HashTrieMapTests extends TestsUtility {
         } catch (IllegalArgumentException ex) {
             // Do nothing
         }
-
         try {
             STUDENT.insert(a("foo"), null);
             return 0;
         } catch (IllegalArgumentException ex) {
             // Do nothing
         }
-
         return 1;
     }
-
     /**
      * Checks to see the trie correctly handles the case where you delete
      * absolutely everything.
@@ -164,44 +135,35 @@ public class HashTrieMapTests extends TestsUtility {
         AlphabeticString keyA = a("keyboard");
         AlphabeticString keyB = a("keyesian");
         AlphabeticString keyC = a("bayesian");
-
         if (STUDENT.size() != 0 || !STUDENT.isEmpty()) {
             return 0;
         }
-
         STUDENT.insert(keyA, "KEYBOARD");
         STUDENT.insert(keyB, "KEYESIAN");
         STUDENT.insert(keyC, "BAYESIAN");
-
         if (!containsAllPaths(STUDENT, "keyboard", "keyesian", "bayesian")) {
             return 0;
         }
         if (STUDENT.size() != 3 || STUDENT.isEmpty()) {
             return 0;
         }
-
         STUDENT.delete(keyA);
         STUDENT.delete(keyB);
         STUDENT.delete(keyC);
-
         if (STUDENT.size() != 0 || !STUDENT.isEmpty()) {
             return 0;
         }
-
         return doesNotContainAll(STUDENT, "keyboard", "keyesian", "bayesian") ? 1 : 0;
     }
-
     /**
      * Tests what happens if you attempt deleting something that doesn't exist
      * in the trie (but _does_ partially overlap).
      */
     public static int testDeleteNothing() {
         STUDENT.insert(a("aaaa"), "foo");
-
         if (!containsPath(STUDENT, "aaaa", "foo") || STUDENT.size() != 1 || STUDENT.isEmpty()) {
             return 0;
         }
-
         // Should not change the trie
         STUDENT.delete(a("aa"));
         STUDENT.delete(a("a"));
@@ -209,30 +171,23 @@ public class HashTrieMapTests extends TestsUtility {
         STUDENT.delete(a("aaaaa"));
         STUDENT.delete(a(""));
         STUDENT.delete(a("foobar"));
-
         if (!containsPath(STUDENT, "aaaa", "foo") || STUDENT.size() != 1 || STUDENT.isEmpty()) {
             return 0;
         }
-
         return 1;
     }
-
     /**
      * Tests what happens if you try deleting and inserting single characters
      */
     public static int testDeleteAndInsertSingleChars() {
         STUDENT.insert(a("a"), "A");
         STUDENT.insert(a("b"), "B");
-
         STUDENT.delete(a("a"));
         STUDENT.insert(a("b"), "BB");
-
         MockNode expected = node()
                 .branch('b', node("BB"));
-
         return equals(expected, getField(STUDENT, "root")) ? 1 : 0;
     }
-
     /**
      * Tests to see if HashTrieMap correctly handles a trie where everything is in a straight
      * line/the trie has no branching.
@@ -242,20 +197,16 @@ public class HashTrieMapTests extends TestsUtility {
         AlphabeticString keyB = a("gh");
         STUDENT.insert(keyA, "A");
         STUDENT.insert(keyB, "B");
-
         // Trie should still contain "ghost -> A"
         STUDENT.delete(keyB);
         if (STUDENT.find(keyB) != null || !STUDENT.findPrefix(keyB) || !STUDENT.find(keyA).equals("A")) {
             return 0;
         }
-
         // Trie should now contain "gh -> C", but not "ghost -> A"
         STUDENT.insert(keyB, "C");
         STUDENT.delete(keyA);
-
         return (STUDENT.find(keyB).equals("C") && STUDENT.find(keyA) == null && !STUDENT.findPrefix(a("gho"))) ? 1 : 0;
     }
-
     /**
      * A slight variation of the previous test.
      */
@@ -277,7 +228,6 @@ public class HashTrieMapTests extends TestsUtility {
                 .branch('b', new MockNode("baz"));
         return equals(expected, getField(STUDENT, "root")) ? 1 : 0;
     }
-
     /**
      * Tests that just working with empty strings does the correct thing.
      */
@@ -286,17 +236,13 @@ public class HashTrieMapTests extends TestsUtility {
         if (!"Foo".equals(STUDENT.find(a(""))) || STUDENT.size() != 1 || STUDENT.isEmpty()) {
             return 0;
         }
-
         STUDENT.delete(a(""));
-
         if (STUDENT.find(a("")) != null || STUDENT.size() > 0 && !STUDENT.isEmpty()) {
             return 0;
         }
-
         STUDENT.insert(a(""), "Bar");
         return "Bar".equals(STUDENT.find(a(""))) && STUDENT.size() == 1 && !STUDENT.isEmpty() ? 1 : 0;
     }
-
     public static int testDeletingNullEntriesCausesError() {
         try {
             STUDENT.delete((AlphabeticString) null);
@@ -305,16 +251,13 @@ public class HashTrieMapTests extends TestsUtility {
         }
         return 0;
     }
-
     public static int testClear() {
         addAll(STUDENT, "keyboard", "keyesian", "bayesian");
         STUDENT.clear();
-
         return (STUDENT.size() == 0 &&
                 STUDENT.isEmpty() &&
                 doesNotContainAll(STUDENT, "keyboard", "keyesian", "bayesian")) ? 1 : 0;
     }
-
     public static int checkUnderlyingStructure() {
         STUDENT.insert(a(""), "A");
         STUDENT.insert(a("foo"), "B");
@@ -322,7 +265,6 @@ public class HashTrieMapTests extends TestsUtility {
         STUDENT.insert(a("fezzy"), "D");
         STUDENT.insert(a("jazz"), "E");
         STUDENT.insert(a("jazzy"), "F");
-
         MockNode fullExpected = node("A")
             .branch('f', node()
                 .branch('o', node()
@@ -336,14 +278,11 @@ public class HashTrieMapTests extends TestsUtility {
                     .branch('z', node()
                         .branch('z', node("E")
                             .branch('y', node("F"))))));
-
         if (!equals(fullExpected, getField(STUDENT, "root"))) {
             return 0;
         }
-
         STUDENT.delete(a("fezzy"));
         STUDENT.delete(a("jazz"));
-
         MockNode delete1 = node("A")
             .branch('f', node()
                 .branch('o', node()
@@ -355,15 +294,12 @@ public class HashTrieMapTests extends TestsUtility {
                     .branch('z', node()
                         .branch('z', node()
                             .branch('y', node("F"))))));
-
         if (!equals(delete1, getField(STUDENT, "root"))) {
             return 0;
         }
-
         STUDENT.delete(a(""));
         STUDENT.delete(a("foo"));
         STUDENT.delete(a("jazz")); // should do nothing
-
         MockNode delete2 = node()
             .branch('f', node()
                 .branch('e', node()
@@ -373,33 +309,24 @@ public class HashTrieMapTests extends TestsUtility {
                     .branch('z', node()
                         .branch('z', node()
                             .branch('y', node("F"))))));
-
         if (!equals(delete2, getField(STUDENT, "root"))) {
             return 0;
         }
-
         STUDENT.insert(a("f"), "Z");
         STUDENT.delete(a("jazzy"));
         STUDENT.delete(a("fez"));
-
         MockNode delete3 = node().branch('f', node("Z"));
-
         if (!equals(delete3, getField(STUDENT, "root"))) {
             return 0;
         }
-
         STUDENT.delete(a("f"));
-
         boolean rootIsSingleNode = equals(node(), getField(STUDENT, "root"));
         boolean rootIsNull = equals(null, getField(STUDENT, "root"));
         if (!(rootIsSingleNode || rootIsNull)) {
             return 0;
         }
-
         return 1;
-
     }
-
     protected static boolean equals(MockNode expected, HashTrieMap<Character, AlphabeticString, String>.HashTrieNode student) {
         if (expected == null && student == null) {
             return true;
@@ -427,34 +354,27 @@ public class HashTrieMapTests extends TestsUtility {
             return true;
         }
     }
-
     protected static MockNode node() {
         return new MockNode();
     }
-
     protected static MockNode node(String value) {
         return new MockNode(value);
     }
-
     protected static class MockNode {
         public Map<Character, MockNode> pointers;
         public String value;
-
         public MockNode() {
             this(null);
         }
-
         public MockNode(String value) {
             this.pointers = new HashMap<>();
             this.value = value;
         }
-
         public MockNode branch(char c, MockNode child) {
             this.pointers.put(c, child);
             return this;
         }
     }
-
     public static int stressTest() {
         // Should contain 30 characters
         char[] symbols = "abcdefghijklmnopqrstuvwxyz!@#$".toCharArray();
@@ -470,7 +390,6 @@ public class HashTrieMapTests extends TestsUtility {
                 }
             }
         }
-
         for (char a : symbols) {
             for (char b : symbols) {
                 if (!STUDENT.findPrefix(new AlphabeticString(new Character[]{a, b}))) {
@@ -478,7 +397,6 @@ public class HashTrieMapTests extends TestsUtility {
                 }
             }
         }
-
         i = 0;
         for (char a : symbols) {
             for (char b : symbols) {
@@ -493,35 +411,28 @@ public class HashTrieMapTests extends TestsUtility {
                 }
             }
         }
-
         return 1;
     }
-
     /**
      * Converts a String into an AlphabeticString
      */
     private static AlphabeticString a(String s) {
         return new AlphabeticString(s);
     }
-
     /**
      * Checks if the trie contains the word and the expected value, and that all prefixes of
      * the word exist in the trie.
      */
     private static boolean containsPath(HashTrieMap<Character, AlphabeticString, String> trie, String word, String expectedValue) {
         AlphabeticString key = a(word);
-
         boolean valueCorrect = expectedValue.equals(trie.find(key));
         boolean fullWordIsPrefix = trie.findPrefix(key);
         boolean invalidWordDoesNotExist = trie.find(a(word + "$")) == null;
-
         if (!valueCorrect || !fullWordIsPrefix || !invalidWordDoesNotExist) {
             return false;
         }
-
         return allPrefixesExist(trie, word);
     }
-
     /**
      * Checks if the trie contains the word, and that all prefixes of the word exist in the trie.
      *
@@ -530,7 +441,6 @@ public class HashTrieMapTests extends TestsUtility {
     private static boolean containsPath(HashTrieMap<Character, AlphabeticString, String> trie, String word) {
         return containsPath(trie, word, word.toUpperCase());
     }
-
     /**
      * Returns true if all prefixes of a word exist in the trie.
      *
@@ -547,7 +457,6 @@ public class HashTrieMapTests extends TestsUtility {
         }
         return true;
     }
-
     private static boolean containsAllPaths(HashTrieMap<Character, AlphabeticString, String> trie, String... words) {
         for (String word : words) {
             if (!containsPath(trie, word)) {
@@ -556,7 +465,6 @@ public class HashTrieMapTests extends TestsUtility {
         }
         return true;
     }
-
     private static boolean doesNotContainAll(HashTrieMap<Character, AlphabeticString, String> trie, String... words) {
         for (String word : words) {
             if (trie.find(a(word)) != null) {
@@ -565,7 +473,6 @@ public class HashTrieMapTests extends TestsUtility {
         }
         return true;
     }
-
     private static boolean containsAllPrefixes(HashTrieMap<Character, AlphabeticString, String> trie, String... words) {
         for (String word : words) {
             if (!trie.findPrefix(a(word))) {
@@ -574,7 +481,6 @@ public class HashTrieMapTests extends TestsUtility {
         }
         return true;
     }
-
     private static boolean doesNotContainAllPrefixes(HashTrieMap<Character, AlphabeticString, String> trie, String... words) {
         for (String word : words) {
             if (trie.findPrefix(a(word))) {
@@ -583,7 +489,6 @@ public class HashTrieMapTests extends TestsUtility {
         }
         return true;
     }
-
     private static void addAll(HashTrieMap<Character, AlphabeticString, String> trie, String... words) {
         for (String word : words) {
             trie.insert(a(word), word.toUpperCase());
