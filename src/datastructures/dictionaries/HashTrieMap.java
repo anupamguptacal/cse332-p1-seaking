@@ -5,9 +5,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import cse332.datastructures.containers.Item;
 import cse332.exceptions.NotYetImplementedException;
 import cse332.interfaces.misc.BString;
 import cse332.interfaces.trie.TrieMap;
+import cse332.types.AlphabeticString;
 
 /**
  * See cse332/interfaces/trie/TrieMap.java
@@ -38,17 +40,50 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
 
     @Override
     public V insert(K key, V value) {
-        throw new NotYetImplementedException();
+       /* if (key == null || value == null) {
+        	throw new IllegalArgumentException();
+        }
+        HashTrieNode oldValue = null;
+        HashTrieNode current = (HashTrieNode)this.root;
+        for (A letter : key) {
+        	current = current.pointers.get(letter);
+        }
+        if (current != null) {
+        	oldValue = current;
+        } */
+    	throw new NotYetImplementedException();
     }
 
     @Override
     public V find(K key) {
-        throw new NotYetImplementedException();
+        if (key == null) {
+        	throw new IllegalArgumentException();
+        }
+        Iterator<A> keyIterator = key.iterator();
+        HashTrieNode current = (HashTrieNode)this.root;
+        while (keyIterator.hasNext()) {
+        	current = current.pointers.get(keyIterator.next());
+        	if (current == null) {
+        		return null;
+        	}
+        }
+        return current.value;
     }
 
     @Override
     public boolean findPrefix(K key) {
-        throw new NotYetImplementedException();
+        if (key == null) {
+        	throw new IllegalArgumentException();
+        }
+        Iterator<A> keyIterator = key.iterator();
+        HashTrieNode current = (HashTrieNode)this.root;
+        while (keyIterator.hasNext()) {
+        	current = current.pointers.get(keyIterator.next());
+        	if (current == null) {
+        		return false;
+        	}
+        }
+        return true;
     }
 
     @Override
