@@ -1,6 +1,7 @@
 package datastructures.worklists;
 
 import cse332.interfaces.worklists.FixedSizeFIFOWorkList;
+import java.util.NoSuchElementException;
 import cse332.exceptions.NotYetImplementedException;
 
 /**
@@ -10,83 +11,63 @@ import cse332.exceptions.NotYetImplementedException;
 public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
 	public E[] array;
 	private int read;
-	private int write;
 	private int size;
 	
     public CircularArrayFIFOQueue(int capacity) {
         super(capacity);
         this.array = (E[])new Comparable[capacity];
         this.read = 0;
-        this.write = 0;
         this.size = 0;
     }
 
     @Override
     // read refers to the element, write refers to the last space where the last element goes
     public void add(E work) {
-    	if(this.size() == this.array.length) {
+    	if (this.isFull()) {
     		throw new IllegalStateException();
     	}
-    	/*if(this.write == this.array.length) {
-    		this.write = 0;
-    	}*/
-    		this.array[(this.write)%this.array.length] = work;
-    		this.write++;
-    		this.size ++;
+    	this.array[(this.read + this.size) % this.array.length] = work;
+    	this.size++;
     }
     
 
     @Override
     public E peek() {
-    	if(this.size() == 0) {
-    		throw new java.util.NoSuchElementException();
-    	} else {
-    		if(this.read == this.array.length) {
-    			this.read = 0;
-    		}
-    		return this.array[((this.read) % this.array.length)];
-    	}
+    	return this.peek(0);
     }
     
     @Override
     public E peek(int i) {
-    	if(this.size() == 0) {
-    		throw new java.util.NoSuchElementException();
-    	} else if ( i < 0 || i > this.size()) {
-    		throw new IndexOutOfBoundsException();
-    	} else {
-    		if(this.read == this.array.length) {
-    			this.read = 0;
-    		}
-    		return this.array[(this.read + i) % this.array.length];
+    	if (!(this.size > 0)) {
+    		throw new NoSuchElementException();
     	}
+    	if (i < 0 || i >= this.size) {
+    		throw new IndexOutOfBoundsException();
+    	}
+    	return this.array[(this.read + i) % this.array.length];
     }
     
     @Override
     public E next() {
-    	if(this.size() == 0) {
-    		throw new java.util.NoSuchElementException();
+    	if (!(this.size > 0)) {
+    		throw new NoSuchElementException();
     	}
-    	int temp = this.read;
-    	this.read++;
-    	if(this.read > this.array.length) {
-    		this.read = 0;
-    	}
+    	E element = this.array[this.read];
+    	this.read = (this.read + 1) % this.array.length;
     	this.size--;
-    	return this.array[temp % this.array.length];
+    	return element;
     	
     }
     
     @Override
     public void update(int i, E value) {
-    	if(this.size() == 0) {
-    		throw new java.util.NoSuchElementException();
+    	if (!(this.size > 0)) {
+    		throw new NoSuchElementException();
     	}
-    	if(i < 0 || i > this.size()) {
+    	if (i < 0 || i >= this.size) {
     		throw new IndexOutOfBoundsException();
-    	}	else  {
-    		this.array[(this.read + i) % this.array.length] = value;
     	}
+    	this.array[(this.read + i) % this.array.length] = value;
     }
     
     @Override
@@ -98,9 +79,8 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     @Override
     public void clear() {
     	this.size = 0;
-    	this.write = 0;
     	this.read = 0;
-    	this.array = (E[])new Comparable[super.capacity()];
+    	this.array = (E[])new Comparable[this.capacity()];
     }
 
     @Override
