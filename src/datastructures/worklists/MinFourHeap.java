@@ -79,7 +79,6 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
 
     @Override
     // removes all elements from the list
-    // is it supposed to be exactly like the constructor...?
     public void clear() {
         this.data = (E[])new Comparable[10];
         this.size = 0;
@@ -88,7 +87,6 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
     // doubles capacity of array
     private void growArray() {
     	E[] newArray = (E[])new Comparable[this.size * 2];
-    	// Should we be using an iterator here? It's an array...
     	for (int i = 0; i < this.size; i++) {
     		newArray[i] = this.data[i];
     	}

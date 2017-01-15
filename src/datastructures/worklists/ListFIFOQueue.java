@@ -59,7 +59,6 @@ public class ListFIFOQueue<E> extends FIFOWorkList<E> {
         if (!this.hasWork()) {
         	throw new NoSuchElementException();
         }
-        
         return this.front.data;
     }
 

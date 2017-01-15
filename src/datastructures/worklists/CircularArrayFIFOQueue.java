@@ -21,7 +21,7 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     }
 
     @Override
-    // read refers to the element, write refers to the last space where the last element goes
+    // read refers to the first element in the array
     public void add(E work) {
     	if (this.isFull()) {
     		throw new IllegalStateException();
@@ -38,20 +38,14 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     
     @Override
     public E peek(int i) {
-    	if (!(this.size > 0)) {
-    		throw new NoSuchElementException();
-    	}
-    	if (i < 0 || i >= this.size) {
-    		throw new IndexOutOfBoundsException();
-    	}
+    	this.sizeCheck();
+    	this.boundsCheck(i);
     	return this.array[(this.read + i) % this.array.length];
     }
     
     @Override
     public E next() {
-    	if (!(this.size > 0)) {
-    		throw new NoSuchElementException();
-    	}
+    	this.sizeCheck();
     	E element = this.array[this.read];
     	this.read = (this.read + 1) % this.array.length;
     	this.size--;
@@ -61,12 +55,8 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     
     @Override
     public void update(int i, E value) {
-    	if (!(this.size > 0)) {
-    		throw new NoSuchElementException();
-    	}
-    	if (i < 0 || i >= this.size) {
-    		throw new IndexOutOfBoundsException();
-    	}
+    	this.sizeCheck();
+    	this.boundsCheck(i);
     	this.array[(this.read + i) % this.array.length] = value;
     }
     
@@ -81,6 +71,18 @@ public class CircularArrayFIFOQueue<E> extends FixedSizeFIFOWorkList<E> {
     	this.size = 0;
     	this.read = 0;
     	this.array = (E[])new Comparable[this.capacity()];
+    }
+    
+    private void sizeCheck() {
+    	if (this.size <= 0) {
+    		throw new NoSuchElementException();
+    	}
+    }
+    
+    private void boundsCheck(int i) {
+    	if (i < 0 || i >= this.size) {
+    		throw new IndexOutOfBoundsException();
+    	}
     }
 
     @Override

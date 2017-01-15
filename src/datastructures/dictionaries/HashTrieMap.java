@@ -45,13 +45,14 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     	if (this.root == null) {
     		this.root = new HashTrieNode();
     	}
+    	
     	V returnValue = null;
     	if (key.isEmpty()) {
     		returnValue = this.root.value;
     		this.root.value = value;
     	} else {
     		HashTrieNode current = (HashTrieNode)this.root;
-    		for(A part : key) {
+    		for (A part : key) {
     			if (!current.pointers.containsKey(part)) {
     				current.pointers.put(part, new HashTrieNode());    			
     			}
@@ -60,8 +61,12 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     		returnValue = current.value;
     		current.value = value;
     	}
-    	// Why does the test fail if I put this.size++ in the else statement?
-    	this.size++;
+    	
+    	// returnValue is null when there was no previous value
+    	// for the given key, meaning we need to increment size
+    	if (returnValue == null) {
+    		this.size++;
+    	}
     	return returnValue;
     }
 
@@ -73,6 +78,7 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     	if (this.root == null) {
     		return null;
     	}
+    	
     	HashTrieNode current = (HashTrieNode)this.root;
     	for (A part: key) {
     		current = current.pointers.get(part);
@@ -88,10 +94,10 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     	if (key == null) {
     		throw new IllegalArgumentException();
     	}
-    	// Is this check necessary?
     	if (this.root == null) {
     		return false;
     	}
+    	
     	HashTrieNode current = (HashTrieNode)this.root;
     	for (A part: key) {
     		current = current.pointers.get(part);
