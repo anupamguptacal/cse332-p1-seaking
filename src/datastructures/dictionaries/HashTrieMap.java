@@ -109,8 +109,6 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     }
 
     @Override
-    // Whenever I try to edit this it keeps breaking, but I'm pretty
-    // sure that there is some optimization to be done here
     public void delete(K key) {
     	if (key == null) {
     		throw new IllegalArgumentException();
@@ -129,11 +127,10 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     		if (!current.pointers.isEmpty()) {
     			current = current.pointers.get(part);
     		} else {
-    			// current = null?
     			return;
     		}
     	}
-    	if (current.value != null) {
+    	if (current != null && current.value != null) {
     		if (!current.pointers.isEmpty()) {
     			current.value = null;
     		} else {
@@ -151,6 +148,6 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     @Override
     public void clear() {
     	this.size = 0;
-    	this.root = null;
+    	this.root = new HashTrieNode();
     }
 }
