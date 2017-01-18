@@ -114,6 +114,9 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     	} 
     	HashTrieNode lastDelete = (HashTrieNode)this.root;
     	A lastDeletePart = null;
+    	if (key.iterator().hasNext()) {
+			lastDeletePart = key.iterator().next();
+		}
     	HashTrieNode current = (HashTrieNode)this.root;
     	for (A part: key) {
     		if (current == null) {
@@ -132,15 +135,12 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     	if (current != null && current.value != null) {
     		if (!current.pointers.isEmpty()) {
     			current.value = null;
+    		} else if (lastDeletePart != null) {
+    			lastDelete.pointers.remove(lastDeletePart);
     		} else {
-    			this.size--;
-    			if (lastDeletePart != null) {
-    				lastDelete.pointers.remove(lastDeletePart);
-    			}
-    			else {
-    				this.root = null;
-    			}
+    			this.root.value = null;
     		}
+    		this.size--;
     	}
     }
 
